@@ -130,3 +130,13 @@ plt.title("Missing Values Before vs After Cleaning")
 plt.legend()
 plt.tight_layout()
 plt.show()
+
+
+# Saved Cleaned Dataset
+# Confirmed there is no missing values before saving
+df_clean.isna().sum()
+df_clean.to_csv("../data/processed/Nazario_cleanedData.csv", index=False)
+
+# Preview the cleaned dataset
+print("\nPreview of cleaned dataset:")
+print(df_clean.head())
