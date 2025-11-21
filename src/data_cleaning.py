@@ -1,12 +1,9 @@
 import re
-
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 
-# Load raw and Overview
+# Load raw data and Overview
 df_raw = pd.read_csv(
     "../data/raw/Nazario-5.csv",
     encoding="ISO-8859-1",
@@ -29,11 +26,11 @@ def extract_urls(text):
     return re.findall(url_pattern, text)
 
 
-# Strip whitespace and Standardize column
-def clean_whitespace(text):
-    if pd.isna(text):
-        return text
-    return re.sub(r"\s+", " ", text).strip()
+# # Strip whitespace and Standardize column
+# def clean_whitespace(text):
+#     if pd.isna(text):
+#         return text
+#     return re.sub(r"\s+", " ", text).strip()
 
 
 # """
@@ -51,11 +48,33 @@ def clean_and_anonymise_text(text):
         return ""
 
     text = text.lower()
+
+    # Replace email addresses
     text = re.sub(r"\S+@\S+", "<EMAIL>", text)
+
+    # Replace URLs
     text = re.sub(r"http\S+|www\.\S+", "<LINK>", text)
-    text = re.sub(r"(\+?\d[\d\-\(\) ]{7,}\d)", "<PHONE>", text)
-    text = re.sub(r"\d+", "<NUMBER>", text)
-    text = re.sub(r"[^a-z\s<>]", "", text)
+
+    # Replace phone numbers (digits, +, -, parentheses, spaces)
+    text = re.sub(r"\+?\d[\d\-\(\) ]{7,}\d", "<PHONE>", text)
+
+    # Protect tokens before replacing numbers
+    text = text.replace("<EMAIL>", "EMAILTOKEN")
+    text = text.replace("<LINK>", "LINKTOKEN")
+    text = text.replace("<PHONE>", "PHONETOKEN")
+
+    # Replace remaining numbers
+    # text = re.sub(r"\d+", "<NAME>", text)
+
+    # Restore tokens
+    text = text.replace("EMAILTOKEN", "<EMAIL>")
+    text = text.replace("LINKTOKEN", "<LINK>")
+    text = text.replace("PHONETOKEN", "<PHONE>")
+
+    # Remove other non-alphabetic characters but keep < and >
+    # text = re.sub(r"[^a-z\s<>]", "", text)
+
+    # Remove extra whitespace
     text = re.sub(r"\s+", " ", text).strip()
 
     return text
