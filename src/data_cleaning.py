@@ -21,8 +21,6 @@ print(df_raw.describe())
 
 
 # Cleaning functions
-
-
 # Extract URLS
 def extract_urls(text):
     if pd.isna(text):
@@ -117,7 +115,18 @@ df_clean["body_length"] = df_clean["body"].apply(len)
 df_clean["num_recipients"] = df_clean["receiver"].apply(
     lambda x: len(x.split(",")) if pd.notna(x) else 0
 )
-print(df_clean.info()) # dataset overview
+print(df_clean.info())  # dataset overview
 
 
+# Visualisation of missing values
+plt.figure(figsize=(10, 5))
+# Before cleaning
+df_raw.isna().sum().plot(kind="bar", color="red", alpha=0.7, label="Before Cleaning")
+# After cleaning
+df_clean.isna().sum().plot(kind="bar", color="green", alpha=0.7, label="After Cleaning")
 
+# Comparison of missing values Before and After cleaning
+plt.title("Missing Values Before vs After Cleaning")
+plt.legend()
+plt.tight_layout()
+plt.show()
