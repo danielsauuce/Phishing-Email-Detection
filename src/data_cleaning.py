@@ -22,6 +22,7 @@ print(df_raw.describe())
 
 # Cleaning functions
 
+
 # Extract URLS
 def extract_urls(text):
     if pd.isna(text):
@@ -66,13 +67,27 @@ def clean_and_anonymise_text(text):
 df_clean = df_raw.copy()
 
 # Handled missing values
-# Fill sender and receiver with 'Unknown'
+# Fill sender and receiver missing values
 for col in ["sender", "receiver"]:
-    if col not in df_clean.columns:
-        df_clean[col] = df_raw[col].fillna("Unknown")
+    if col in df_clean.columns:
+        df_clean[col] = df_clean[col].fillna("Unknown")
 
-
-# Fill missing values in subject, or body if empty
+# Fill missing values in subject and body
 for col in ["subject", "body"]:
-    if col not in df_clean.columns:
-        df_clean[col] = df_raw[col].fillna("Unknown")
+    if col in df_clean.columns:
+        df_clean[col] = df_clean[col].fillna("Unknown")
+
+
+# Handle missing dates using mode
+if "date" in df_clean.columns:
+    df_clean["date"] = pd.to_datetime(
+        df_clean["date"], errors="coerce"
+    )  # convert to datetime
+    mode_date = df_clean["date"].mode(dropna=True)
+    if not mode_date.empty:
+        df_clean["date"] = df_clean["date"].fillna(mode_date[0])
+
+
+# Overviewed to check the dataset as i proceed with the cleaning
+print(df_clean.info())
+print(df_clean.isna().sum())
