@@ -21,12 +21,6 @@ print(df_raw.describe())
 
 
 # Cleaning functions
-# Remove HTML tags
-def remove_html(text):
-    if pd.isna(text):
-        return text
-    return re.sub(r"<.*?>", "", text)
-
 
 # Extract URLS
 def extract_urls(text):
@@ -43,20 +37,28 @@ def clean_whitespace(text):
     return re.sub(r"\s+", " ", text).strip()
 
 
-# Remove non-ASCII characters
-def clean_non_ascii(text):
-    if pd.isna(text):
-        return text
-    return text.encode("ascii", errors="ignore").decode()
+# """
+#     Cleans and anonymises raw email text:
+#     - Lowercase
+#     - Replace emails with <EMAIL>
+#     - Replace URLs with <LINK>
+#     - Replace phone numbers with <PHONE>
+#     - Replace numbers with <NUMBER>
+#     - Remove special characters
+#     """
+def clean_and_anonymise_text(text):
 
-
-def anonymise_text(text):
-    "Replace email addresses and names in body with placeholders"
     if pd.isna(text):
-        return text
-    "Replace email"
-    text = re.sub(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", "<EMAIL>", text)
-    text = re.sub(r"\".*?\"", "<NAME>", text)
+        return ""
+
+    text = text.lower()
+    text = re.sub(r"\S+@\S+", "<EMAIL>", text)
+    text = re.sub(r"http\S+|www\.\S+", "<LINK>", text)
+    text = re.sub(r"(\+?\d[\d\-\(\) ]{7,}\d)", "<PHONE>", text)
+    text = re.sub(r"\d+", "<NUMBER>", text)
+    text = re.sub(r"[^a-z\s<>]", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+
     return text
 
 
