@@ -91,3 +91,33 @@ if "date" in df_clean.columns:
 # Overviewed to check the dataset as i proceed with the cleaning
 print(df_clean.info())
 print(df_clean.isna().sum())
+
+
+# Applying the cleaning function and anonymisation
+df_clean["subject_clean"] = df_clean["subject"].apply(clean_and_anonymise_text)
+df_clean["body_clean"] = df_clean["body"].apply(clean_and_anonymise_text)
+
+# Tokenise text by splitting on spaces
+df_clean["subject_tokens"] = df_clean["subject_clean"].apply(lambda x: x.split())
+df_clean["body_tokens"] = df_clean["body_clean"].apply(lambda x: x.split())
+
+# Extract URLs and count
+df_clean["urls"] = df_clean["body"].apply(extract_urls)
+df_clean["url_count"] = df_clean["urls"].apply(len)
+
+# Metadata features
+df_clean["sender_domain"] = (
+    df_clean["sender"].str.extract(r"@([\w\.-]+)")[0].fillna("Unknown")
+)
+df_clean["receiver_domain"] = (
+    df_clean["receiver"].str.extract(r"@([\w\.-]+)")[0].fillna("Unknown")
+)
+df_clean["subject_length"] = df_clean["subject"].apply(len)
+df_clean["body_length"] = df_clean["body"].apply(len)
+df_clean["num_recipients"] = df_clean["receiver"].apply(
+    lambda x: len(x.split(",")) if pd.notna(x) else 0
+)
+print(df_clean.info()) # dataset overview
+
+
+
