@@ -26,13 +26,6 @@ def extract_urls(text):
     return re.findall(url_pattern, text)
 
 
-# # Strip whitespace and Standardize column
-# def clean_whitespace(text):
-#     if pd.isna(text):
-#         return text
-#     return re.sub(r"\s+", " ", text).strip()
-
-
 # """
 #     Cleans and anonymises raw email text:
 #     - Lowercase
