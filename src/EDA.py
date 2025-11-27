@@ -7,12 +7,11 @@ import seaborn as sns
 df = pd.read_csv("../data/processed/Nazario_cleanedData.csv")
 
 # Drop rows with missing values
-df.dropna(inplace=True)
+# df.dropna(inplace=True)
 print(df.shape)
 
-
 #  Convert label to descriptive names
-df["label_name"] = df["label"].map({1: "Legitimate", 0: "Phishing"})
+df["label_name"] = df["label"].map({0: "Legitimate", 1: "Phishing"})
 print(df["label_name"].value_counts())
 
 
