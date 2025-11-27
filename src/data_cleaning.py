@@ -26,7 +26,6 @@ def extract_urls(text):
     return re.findall(url_pattern, str(text))
 
 
-
 # """
 #     Cleans and anonymises raw email text:
 #     - Lowercase
@@ -75,6 +74,7 @@ def clean_and_anonymise_text(text):
     text = re.sub(r"\s+", " ", text).strip()
 
     return text
+
 
 df_clean = df_raw.copy()
 
