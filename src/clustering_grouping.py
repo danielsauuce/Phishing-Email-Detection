@@ -93,3 +93,18 @@ plot_clusters(pca_2d, hier_labels, "Hierarchical Clusters (PCA)")
 plot_clusters(tsne_2d, kmeans_labels, "K-Means Clusters (t-SNE)")
 plot_clusters(tsne_2d, dbscan_labels, "DBSCAN Clusters (t-SNE)")
 plot_clusters(tsne_2d, hier_labels, "Hierarchical Clusters (t-SNE)")
+
+
+# SAVE CLEAN CLUSTERED DATASET
+df_clean = df.copy()
+df_clean["Cluster_KMeans"] = kmeans_labels
+df_clean["Cluster_DBSCAN"] = dbscan_labels
+df_clean["Cluster_Hierarchical"] = hier_labels
+
+# Confirm no missing values
+print(df_clean.isna().sum())
+
+# Save final dataset
+df_clean.to_csv("../data/clustered/Nazario_clusteredData.csv", index=False)
+
+print(df_clean.info())
