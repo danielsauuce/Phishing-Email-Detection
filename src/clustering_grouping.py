@@ -82,3 +82,14 @@ except:
 # DIMENSIONALITY REDUCTION FOR VISUALISATION
 pca_2d = do_pca(X_np)
 tsne_2d = do_tsne(X_np)
+
+
+# PCA Visualizations
+plot_clusters(pca_2d, kmeans_labels, "K-Means Clusters (PCA)")
+plot_clusters(pca_2d, dbscan_labels, "DBSCAN Clusters (PCA)")
+plot_clusters(pca_2d, hier_labels, "Hierarchical Clusters (PCA)")
+
+# t-SNE Visualizations
+plot_clusters(tsne_2d, kmeans_labels, "K-Means Clusters (t-SNE)")
+plot_clusters(tsne_2d, dbscan_labels, "DBSCAN Clusters (t-SNE)")
+plot_clusters(tsne_2d, hier_labels, "Hierarchical Clusters (t-SNE)")
