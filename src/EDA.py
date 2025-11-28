@@ -218,3 +218,26 @@ plt.tight_layout()
 plt.show()
 
 
+# Token & Binary Metadata Analysis
+binary_features = [
+    "has_url",
+    "many_urls",
+    "no_url_but_link_token",
+    "has_phone",
+    "has_email_token",
+    "is_short_body",
+    "is_long_subject",
+]
+
+plt.figure(figsize=(18, 8))
+for i, feature in enumerate(binary_features):
+    plt.subplot(3, 3, i + 1)
+    sns.countplot(data=df, x=feature, hue="label_name", palette="plasma")
+    plt.title(f"Distribution of {feature}")
+    plt.xlabel("")
+    plt.xticks([0, 1], ["No", "Yes"])
+
+plt.tight_layout()
+plt.show()
+
+
