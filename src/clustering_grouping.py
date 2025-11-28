@@ -9,6 +9,7 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.metrics import silhouette_score
 import matplotlib.pyplot as plt
+import os
 
 
 # Load engineered dataset
@@ -108,3 +109,60 @@ print(df_clean.isna().sum())
 df_clean.to_csv("../data/clustered/Nazario_clusteredData.csv", index=False)
 
 print(df_clean.info())
+
+
+# K-MEANS CLUSTER ANALYSIS
+# Use only metadata features for analysis
+metadata_cols = [c for c in X.columns if not c.startswith("svd_")]
+cluster_summary = df_clean.copy()
+cluster_summary["cluster"] = kmeans_labels
+
+# Compute mean values per cluster
+cluster_means = cluster_summary.groupby("cluster")[metadata_cols].mean()
+cluster_means.to_csv(
+    os.path.join("../data/clustered", "kmeans_cluster_characteristics.csv")
+)
+
+# Top distinguishing features per cluster
+top_features = {}
+for cluster_id in cluster_means.index:
+    diffs = (cluster_means.loc[cluster_id] - cluster_means.mean()).abs()
+    top = diffs.sort_values(ascending=False).head(10)
+    top_features[cluster_id] = top.index.tolist()
+
+# Save top features
+with open(
+    os.path.join("../data/clustered", "kmeans_cluster_top_features.txt"), "w"
+) as f:
+    for cluster_id, feats in top_features.items():
+        f.write(f"\nCluster {cluster_id} top features:\n")
+        for feat in feats:
+            f.write(f" - {feat}\n")
+
+
+# Human-readable interpretation
+def interpret_cluster(row):
+    desc = []
+    if row["url_count"] > cluster_means["url_count"].mean():
+        desc.append("contains many URLs")
+    if row["body_length"] < cluster_means["body_length"].mean():
+        desc.append("short email body")
+    if row["subject_length"] > cluster_means["subject_length"].mean():
+        desc.append("long subject line")
+    if row["sender_phish_score"] < 0.4:
+        desc.append("sent from low-trust sender domain")
+    if row["total_suspicious_keywords"] > 2:
+        desc.append("contains many phishing-related keywords")
+    return ", ".join(desc) if desc else "no strong characteristics"
+
+
+interpretations = {}
+for cid in cluster_means.index:
+    interpretations[cid] = interpret_cluster(cluster_means.loc[cid])
+
+# Save interpretations
+with open(
+    os.path.join("../data/clustered", "kmeans_cluster_interpretations.txt"), "w"
+) as f:
+    for cid, text in interpretations.items():
+        f.write(f"Cluster {cid}: {text}\n")
