@@ -6,6 +6,10 @@ import seaborn as sns
 # Load the cleaned Dataset
 df = pd.read_csv("../data/processed/Nazario_cleanedData.csv")
 
+# Load engineered feature dataset
+df_fe = pd.read_csv("../data/engineered/featuure_engineering_ready.csv")
+
+
 # Drop rows with missing values
 # df.dropna(inplace=True)
 print(df.shape)
@@ -187,3 +191,30 @@ sns.heatmap(corr, annot=True, cmap="coolwarm", center=0, square=True)
 plt.title("Correlation Matrix of Numerical Features")
 plt.tight_layout()
 plt.show()
+
+
+# Datetime Feature Analysis
+plt.figure(figsize=(18, 5))
+
+# Activity by Hour
+plt.subplot(1, 3, 1)
+sns.countplot(data=df, x="hour", hue="label_name", palette="viridis")
+plt.title("Email Activity by Hour of Day")
+plt.xlabel("Hour (0=Midnight, 23=11 PM)")
+
+# Activity by Day of Week
+plt.subplot(1, 3, 2)
+sns.countplot(data=df, x="day_of_week", hue="label_name", palette="viridis")
+plt.title("Email Activity by Day of Week")
+plt.xlabel("Day of Week (0=Monday, 6=Sunday)")
+
+# Business Hours vs. Off-Hours
+plt.subplot(1, 3, 3)
+sns.countplot(data=df, x="is_business_hours", hue="label_name", palette="viridis")
+plt.xticks([0, 1], ["Off-Hours (18-8)", "Business Hours (9-17)"])
+plt.title("Activity: Business vs. Off-Hours")
+
+plt.tight_layout()
+plt.show()
+
+

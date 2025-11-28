@@ -1,0 +1,3 @@
+Cluster 0: short email body, sent from low-trust sender domain
+Cluster 1: long subject line
+Cluster 2: contains many URLs, long subject line, sent from low-trust sender domain

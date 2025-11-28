@@ -1,0 +1,36 @@
+
+Cluster 0 top features:
+ - has_url
+ - no_url_but_link_token
+ - sender_phish_score
+ - from_high_risk_domain
+ - receiver_phish_score
+ - receiver_domain_encoded
+ - total_suspicious_keywords
+ - many_urls
+ - has_email_token
+ - subject_length
+
+Cluster 1 top features:
+ - sender_phish_score
+ - from_high_risk_domain
+ - receiver_phish_score
+ - total_suspicious_keywords
+ - has_url
+ - receiver_domain_encoded
+ - no_url_but_link_token
+ - is_non_reply_sender
+ - hour
+ - many_urls
+
+Cluster 2 top features:
+ - has_url
+ - no_url_but_link_token
+ - receiver_phish_score
+ - many_urls
+ - sender_phish_score
+ - from_high_risk_domain
+ - has_email_token
+ - total_suspicious_keywords
+ - url_count
+ - day_of_week
