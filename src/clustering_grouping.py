@@ -67,3 +67,18 @@ try:
     print("Silhouette (DBSCAN):", silhouette_score(X_np, dbscan_labels))
 except:
     print("Silhouette (DBSCAN): Not valid (clusters may include noise)")
+
+
+# HIERARCHICAL CLUSTERING (Agglomerative)
+hier = AgglomerativeClustering(n_clusters=3)
+hier_labels = hier.fit_predict(X_np)
+
+try:
+    print("Silhouette (Hierarchical):", silhouette_score(X_np, hier_labels))
+except:
+    print("Silhouette (Hierarchical): Not valid")
+
+
+# DIMENSIONALITY REDUCTION FOR VISUALISATION
+pca_2d = do_pca(X_np)
+tsne_2d = do_tsne(X_np)
