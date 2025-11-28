@@ -59,3 +59,11 @@ except:
     print("Silhouette (KMeans): Not valid")
 
 
+# DBSCAN
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+dbscan_labels = dbscan.fit_predict(X_np)
+
+try:
+    print("Silhouette (DBSCAN):", silhouette_score(X_np, dbscan_labels))
+except:
+    print("Silhouette (DBSCAN): Not valid (clusters may include noise)")
