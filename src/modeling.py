@@ -77,3 +77,14 @@ def evaluate_and_save(model_name, y_true, y_pred, y_prob):
     return metrics
 
 
+# LOGISTIC REGRESSION
+log_reg = LogisticRegression(max_iter=5000)
+log_reg.fit(X_train, y_train)
+
+y_pred_lr = log_reg.predict(X_test)
+y_prob_lr = log_reg.predict_proba(X_test)[:, 1]
+
+evaluate_and_save("Logistic_Regression", y_test, y_pred_lr, y_prob_lr)
+
+joblib.dump(log_reg, os.path.join(RESULTS_DIR, "LogisticRegression_model.joblib"))
+
