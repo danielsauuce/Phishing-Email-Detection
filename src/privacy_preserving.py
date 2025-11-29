@@ -48,3 +48,40 @@ def simulate_federated_learning(X_train, y_train, n_clients=3):
     return client_models
 
 
+def aggregate_predictions(client_models, X_test):
+    """
+    Aggregates predictions from multiple client models (simple averaging).
+    """
+    probs = np.zeros((len(X_test), 2))
+    for model in client_models:
+        probs += model.predict_proba(X_test)
+    probs /= len(client_models)
+    y_pred = np.argmax(probs, axis=1)
+    return y_pred, probs[:, 1]
+
+
+def simulate_privacy_training():
+    print("Simulating privacy-preserving training...")
+
+    # Step 1: Apply differential privacy to training features
+    X_train_noisy = add_differential_privacy_noise(X_train, epsilon=1.0)
+    print("- Applied differential privacy noise to training data")
+
+    # Step 2: Simulate federated learning
+    client_models = simulate_federated_learning(X_train_noisy, y_train, n_clients=3)
+    print("- Federated learning simulation complete across 3 clients")
+
+    # Step 3: Aggregate predictions securely
+    y_pred, y_prob = aggregate_predictions(client_models, X_test)
+    print("- Aggregated client predictions without sharing raw data")
+
+    # Step 4: Evaluate model
+    acc = accuracy_score(y_test, y_pred)
+    print(f"- Accuracy of aggregated privacy-preserving model: {acc:.4f}")
+    print(
+        "Privacy-preserving simulation complete. Ready for integration with PySyft or SmartNoise."
+    )
+
+
+if __name__ == "__main__":
+    simulate_privacy_training()
