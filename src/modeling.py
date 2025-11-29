@@ -34,6 +34,46 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # Create results directory
-RESULTS_DIR = "..data/modeling/models/"
+RESULTS_DIR = "../data/modeling"
 os.makedirs(RESULTS_DIR, exist_ok=True)
+
+
+# EVALUATION FUNCTION
+def evaluate_and_save(model_name, y_true, y_pred, y_prob):
+
+    metrics = {
+        "Model": model_name,
+        "Accuracy": accuracy_score(y_true, y_pred),
+        "Precision": precision_score(y_true, y_pred),
+        "Recall": recall_score(y_true, y_pred),
+        "F1 Score": f1_score(y_true, y_pred),
+        "ROC-AUC": roc_auc_score(y_true, y_prob),
+    }
+
+    # Save metrics to CSV
+    pd.DataFrame([metrics]).to_csv(
+        os.path.join(RESULTS_DIR, f"{model_name}_metrics.csv"), index=False
+    )
+
+    # Confusion Matrix
+    cm = confusion_matrix(y_true, y_pred)
+    plt.figure(figsize=(5, 4))
+    sns.heatmap(cm, annot=True, cmap="Blues", fmt="d")
+    plt.title(f"{model_name} - Confusion Matrix")
+    plt.tight_layout()
+    plt.savefig(os.path.join(RESULTS_DIR, f"{model_name}_confusion_matrix.png"))
+    plt.close()
+
+    # ROC Curve
+    RocCurveDisplay.from_predictions(y_true, y_prob)
+    plt.title(f"{model_name} - ROC Curve")
+    plt.tight_layout()
+    plt.savefig(os.path.join(RESULTS_DIR, f"{model_name}_roc_curve.png"))
+    plt.close()
+
+    print(f"\n===== {model_name} METRICS =====")
+    print(pd.DataFrame([metrics]))
+
+    return metrics
+
 
