@@ -9,6 +9,9 @@ df = pd.read_csv("../data/processed/Nazario_cleanedData.csv")
 # Load engineered feature dataset
 df_fe = pd.read_csv("../data/engineered/featuure_engineering_ready.csv")
 
+# Add label_name column to match df
+df_fe["label_name"] = df_fe["label"].map({0: "Legitimate", 1: "Phishing"})
+
 
 # Drop rows with missing values
 # df.dropna(inplace=True)
@@ -30,15 +33,14 @@ plt.ylabel("Count")
 total = len(df)
 for p in plt.gca().patches:
     height = p.get_height()
+    percentage = f"{(height / total) * 100:.1f}%"
     plt.text(
         p.get_x() + p.get_width() / 2.0,
         height + 10,
+        percentage,
         ha="center",
         fontsize=12,
     )
-plt.tight_layout()
-plt.show()
-
 
 # URL Count Analysis/ Distribution
 plt.figure(figsize=(14, 5))
@@ -252,7 +254,9 @@ sns.boxplot(
     data=df_fe[df_fe["body_subject_ratio"] < 20],
     x="label_name",
     y="body_subject_ratio",
+    hue="label_name",
     palette="Set2",
+    legend=False,
 )
 plt.title("Body/Subject Length Ratio by Email Type")
 
@@ -270,4 +274,34 @@ plt.tight_layout()
 plt.show()
 
 
+# Expanded Correlation Heatmap
+all_numerical_features = [
+    "url_count",
+    "subject_length",
+    "body_length",
+    "num_recipients",
+    "hour",
+    "day_of_week",
+    "is_weekend",
+    "is_business_hours",
+    "has_url",
+    "many_urls",
+    "no_url_but_link_token",
+    "has_phone",
+    "body_subject_ratio",
+    "chars_per_url",
+    "is_short_body",
+    "is_long_subject",
+    "label",
+]
 
+corr_matrix = df_fe[all_numerical_features].corr()
+
+plt.figure(figsize=(12, 10))
+sns.heatmap(corr_matrix, annot=False, cmap="coolwarm", center=0, square=True)
+plt.title("Expanded Correlation Matrix of Engineered Features")
+plt.tight_layout()
+plt.show()
+
+# Correlation with target label
+print(corr_matrix["label"].sort_values(ascending=False))
