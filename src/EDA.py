@@ -198,19 +198,19 @@ plt.figure(figsize=(18, 5))
 
 # Activity by Hour
 plt.subplot(1, 3, 1)
-sns.countplot(data=df, x="hour", hue="label_name", palette="viridis")
+sns.countplot(data=df_fe, x="hour", hue="label_name", palette="viridis")
 plt.title("Email Activity by Hour of Day")
 plt.xlabel("Hour (0=Midnight, 23=11 PM)")
 
 # Activity by Day of Week
 plt.subplot(1, 3, 2)
-sns.countplot(data=df, x="day_of_week", hue="label_name", palette="viridis")
+sns.countplot(data=df_fe, x="day_of_week", hue="label_name", palette="viridis")
 plt.title("Email Activity by Day of Week")
 plt.xlabel("Day of Week (0=Monday, 6=Sunday)")
 
 # Business Hours vs. Off-Hours
 plt.subplot(1, 3, 3)
-sns.countplot(data=df, x="is_business_hours", hue="label_name", palette="viridis")
+sns.countplot(data=df_fe, x="is_business_hours", hue="label_name", palette="viridis")
 plt.xticks([0, 1], ["Off-Hours (18-8)", "Business Hours (9-17)"])
 plt.title("Activity: Business vs. Off-Hours")
 
@@ -232,12 +232,42 @@ binary_features = [
 plt.figure(figsize=(18, 8))
 for i, feature in enumerate(binary_features):
     plt.subplot(3, 3, i + 1)
-    sns.countplot(data=df, x=feature, hue="label_name", palette="plasma")
+    sns.countplot(data=df_fe, x=feature, hue="label_name", palette="plasma")
     plt.title(f"Distribution of {feature}")
     plt.xlabel("")
     plt.xticks([0, 1], ["No", "Yes"])
 
 plt.tight_layout()
 plt.show()
+
+
+# Ratio Feature Distributions
+ratio_features = ["body_subject_ratio", "chars_per_url"]
+
+plt.figure(figsize=(14, 6))
+
+# Body/Subject Length Ratio
+plt.subplot(1, 2, 1)
+sns.boxplot(
+    data=df_fe[df_fe["body_subject_ratio"] < 20],
+    x="label_name",
+    y="body_subject_ratio",
+    palette="Set2",
+)
+plt.title("Body/Subject Length Ratio by Email Type")
+
+# Characters per URL
+plt.subplot(1, 2, 2)
+sns.boxplot(
+    data=df_fe[df_fe["chars_per_url"] < 1000],
+    x="label_name",
+    y="chars_per_url",
+    palette="Set2",
+)
+plt.title("Characters per URL by Email Type")
+
+plt.tight_layout()
+plt.show()
+
 
 
