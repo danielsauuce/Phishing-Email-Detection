@@ -83,5 +83,15 @@ def simulate_privacy_training():
     )
 
 
+def add_differential_privacy_noise(X, epsilon=1.0):
+    """
+    Adds Gaussian noise to features to simulate differential privacy.
+    """
+    sensitivity = X.max() - X.min()
+    noise = np.random.normal(loc=0, scale=sensitivity / epsilon, size=X.shape)
+    X_noisy = X + noise
+    return X_noisy
+
+
 if __name__ == "__main__":
     simulate_privacy_training()
