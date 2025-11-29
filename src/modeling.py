@@ -88,3 +88,18 @@ evaluate_and_save("Logistic_Regression", y_test, y_pred_lr, y_prob_lr)
 
 joblib.dump(log_reg, os.path.join(RESULTS_DIR, "LogisticRegression_model.joblib"))
 
+
+# RANDOM FOREST
+rf = RandomForestClassifier(
+    n_estimators=300, max_depth=25, random_state=42, class_weight="balanced"
+)
+
+rf.fit(X_train, y_train)
+
+y_pred_rf = rf.predict(X_test)
+y_prob_rf = rf.predict_proba(X_test)[:, 1]
+
+evaluate_and_save("Random_Forest", y_test, y_pred_rf, y_prob_rf)
+
+joblib.dump(rf, os.path.join(RESULTS_DIR, "RandomForest_model.joblib"))
+
