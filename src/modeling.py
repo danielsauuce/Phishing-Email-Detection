@@ -125,3 +125,40 @@ evaluate_and_save("XGBoost", y_test, y_pred_xgb, y_prob_xgb)
 joblib.dump(xgb_model, os.path.join(RESULTS_DIR, "XGBoost_model.joblib"))
 
 
+# STACKING ENSEMBLE MODEL
+base_learners = [
+    ("lr", LogisticRegression(max_iter=5000)),
+    ("rf", RandomForestClassifier(n_estimators=250, max_depth=20, random_state=42)),
+    (
+        "xgb",
+        xgb.XGBClassifier(
+            n_estimators=400,
+            learning_rate=0.05,
+            max_depth=5,
+            subsample=0.9,
+            colsample_bytree=0.9,
+            eval_metric="logloss",
+            random_state=42,
+        ),
+    ),
+]
+
+meta_learner = LogisticRegression(max_iter=5000)
+
+stack_model = StackingClassifier(
+    estimators=base_learners,
+    final_estimator=meta_learner,
+    stack_method="predict_proba",
+    passthrough=True,
+    n_jobs=-1,
+)
+
+print("\nTraining Stacking Ensemble...")
+stack_model.fit(X_train, y_train)
+
+y_pred_stack = stack_model.predict(X_test)
+y_prob_stack = stack_model.predict_proba(X_test)[:, 1]
+
+evaluate_and_save("Stacking_Ensemble", y_test, y_pred_stack, y_prob_stack)
+
+joblib.dump(stack_model, os.path.join(RESULTS_DIR, "StackingEnsemble_model.joblib"))
