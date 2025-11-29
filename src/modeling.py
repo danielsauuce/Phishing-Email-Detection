@@ -103,3 +103,25 @@ evaluate_and_save("Random_Forest", y_test, y_pred_rf, y_prob_rf)
 
 joblib.dump(rf, os.path.join(RESULTS_DIR, "RandomForest_model.joblib"))
 
+
+# XGBOOST CLASSIFIER
+xgb_model = xgb.XGBClassifier(
+    n_estimators=500,
+    learning_rate=0.05,
+    max_depth=6,
+    subsample=0.9,
+    colsample_bytree=0.9,
+    eval_metric="logloss",
+    random_state=42,
+)
+
+xgb_model.fit(X_train, y_train)
+
+y_pred_xgb = xgb_model.predict(X_test)
+y_prob_xgb = xgb_model.predict_proba(X_test)[:, 1]
+
+evaluate_and_save("XGBoost", y_test, y_pred_xgb, y_prob_xgb)
+
+joblib.dump(xgb_model, os.path.join(RESULTS_DIR, "XGBoost_model.joblib"))
+
+
