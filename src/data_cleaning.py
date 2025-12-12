@@ -59,17 +59,6 @@ def clean_and_anonymise_text(text):
     text = re.sub(r"http\S+|www\.\S+", "<LINK>", text)
     text = re.sub(r"\+?\d[\d\-\(\) ]{7,}\d", "<PHONE>", text)
 
-    # Replace remaining numbers
-    # text = re.sub(r"\d+", "<NAME>", text)
-
-    # # Restore tokens
-    # text = text.replace("EMAILTOKEN", "<EMAIL>")
-    # text = text.replace("LINKTOKEN", "<LINK>")
-    # text = text.replace("PHONETOKEN", "<PHONE>")
-
-    # Remove other non-alphabetic characters but keep < and >
-    # text = re.sub(r"[^a-z\s<>]", "", text)
-
     # Remove extra whitespace
     text = re.sub(r"\s+", " ", text).strip()
 
@@ -100,16 +89,9 @@ if "date" in df_clean.columns:
         df_clean["date"] = df_clean["date"].fillna(mode_date[0])
 
 
-# df_clean["hour"] = df_clean["date"].dt.hour
-# df_clean["day_of_week"] = df_clean["date"].dt.dayofweek
-# df_clean["is_weekend"] = df_clean["day_of_week"].isin([5, 6]).astype(int)
-# df_clean["is_business_hours"] = df_clean["hour"].between(9, 17).astype(int)
-
-
 # Overviewed to check the dataset as i proceed with the cleaning
 print(df_clean.info())
 print(df_clean.isna().sum())
-
 
 # Applying the cleaning function and anonymisation
 df_clean["subject_clean"] = df_clean["subject"].apply(clean_and_anonymise_text)

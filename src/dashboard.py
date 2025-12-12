@@ -1,12 +1,7 @@
-# src/dashboard.py
-# CyberSecure Analytics – FIXED VERSION (No more NameError)
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import plotly.graph_objects as go
-import re
 
 # IMPORTANT: Import StandardScaler and PCA (this fixes the NameError)
 from sklearn.preprocessing import StandardScaler
