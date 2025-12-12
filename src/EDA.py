@@ -125,16 +125,6 @@ sns.barplot(data=keyword_df, y="keyword", x="count")
 plt.title("Frequency of Suspicious Keywords in Subject")
 plt.xlabel("Number of Emails Containing Keyword")
 plt.show()
-
-# print("\nPhishing Rate When Keyword is in Subject:")
-# for _, row in keyword_df.iterrows():
-#     if row["count"] > 0:
-#         print(
-#             f"{row['keyword']:12}: {row['count']:4} emails → {row['phishing_rate']:.3f} phishing rate"
-#         )
-
-
-# Sender & Receiver Domain Analysis
 plt.figure(figsize=(15, 10))
 
 # Top 10 sender domains overall
