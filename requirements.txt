@@ -5,3 +5,7 @@ matplotlib
 seaborn
 hdbscan
 xgboost
+tensorflow
+plotly
+datetime
+transformers
