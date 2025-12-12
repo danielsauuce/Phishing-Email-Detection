@@ -75,5 +75,15 @@ Production-oriented, modular, and easily extensible
 Advanced privacy engineering with differential privacy and federated learning
 Strong evidence of expertise in cybersecurity, machine learning, and privacy-by-design
 
-### System Architecture Diagram
-![System Architecture](assets/system diagram.png)
+## System Architecture
+
+<p align="center">
+  <img src="assets/system_diagram.png" 
+       alt="System Architecture Diagram" 
+       width="900"/>
+  <br>
+  <em>Figure 1: End-to-End Privacy-Aware Phishing Detection Pipeline</em>
+</p>
+
+The diagram illustrates the complete workflow:
+- Raw data → PII anonymisation → EDA → feature engineering → clustering → modelling → interactive dashboard
