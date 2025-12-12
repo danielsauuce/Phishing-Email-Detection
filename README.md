@@ -78,7 +78,7 @@ Strong evidence of expertise in cybersecurity, machine learning, and privacy-by-
 ## System Architecture
 
 <p align="center">
-  <img src="assets/system_diagram.png" 
+  <img src="assest/system_diagram.png" 
        alt="System Architecture Diagram" 
        width="900"/>
   <br>
